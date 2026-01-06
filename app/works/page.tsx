@@ -1,0 +1,44 @@
+import { projects } from "@/libs/data.works";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function WorksPage() {
+  return (
+    <section className="bg-white text-black min-h-screen px-4 md:px-8 py-20 font-sans">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
+        <h2 className="text-7xl md:text-9xl font-bold tracking-tighter uppercase leading-none">
+          Works
+        </h2>
+        <p className="text-[10px] font-mono mt-4 md:mt-0 max-w-[150px] uppercase text-right">
+          // Selected digital craftsmanship.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-0 border-l border-t border-black">
+        {projects.map((project) => (
+          <Link 
+            href={`/works/${project.id}`} 
+            key={project.id} 
+            className="group relative border-r border-b border-black cursor-pointer overflow-hidden bg-white"
+          >
+            <div className="relative aspect-[4/5] grayscale group-hover:grayscale-0 transition-all duration-700">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6 flex justify-between items-end group-hover:bg-black group-hover:text-white transition-colors duration-300">
+              <div>
+                <span className="text-[10px] font-mono mb-2 block">[{project.id}]</span>
+                <h3 className="text-2xl font-bold uppercase tracking-tighter">{project.title}</h3>
+                <p className="text-[10px] uppercase font-medium text-gray-400 group-hover:text-gray-300">{project.category}</p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
