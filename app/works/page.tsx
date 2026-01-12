@@ -16,7 +16,7 @@ export default function WorksPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-0 border-l border-t border-black">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-0 border-l border-t border-black">
           {projects.map((project) => (
             <Link
               href={`/works/${project.id}`}

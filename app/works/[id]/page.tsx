@@ -27,7 +27,7 @@ export default async function ProjectDetail({
         {/* KIRI: Info Project (Sticky) */}
         <div className="w-full md:w-[40%] p-8 md:p-16 md:sticky md:top-[120px] md:h-[calc(100vh-120px)] flex flex-col justify-between border-r border-gray-100">
           <div>
-            <h1 className="text-6xl md:text-7xl font-bold uppercase tracking-tighter mb-12 leading-[0.9]">
+            <h1 className="text-2xl md:text-7xl mt-14 md:mt-2 font-bold uppercase tracking-tighter mb-12 leading-[0.9]">
               {project.title}
             </h1>
 
@@ -75,7 +75,7 @@ export default async function ProjectDetail({
             className="group py-40 flex flex-col items-center justify-center bg-black text-white hover:bg-zinc-900 transition-all duration-500 uppercase font-bold text-sm tracking-[0.3em]"
           >
             <span className="text-[10px] font-mono mb-4 opacity-40 group-hover:opacity-100">Next Project</span>
-            <div className="text-2xl md:text-4xl tracking-tighter">
+            <div className="text-xl md:text-4xl tracking-tighter">
               {nextProject.title} →
             </div>
           </Link>

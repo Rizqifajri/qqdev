@@ -58,4 +58,15 @@ export const projects: Project[] = [
     thumbnail: "/kareerly-1.png",
     images: ["/kareerly-1.png", "/kareerly-2.png"],
   },
+  {
+    id: "05",
+    title: "Financial Management Systems",
+    category: "Fullstack",
+    client: "Personal Project",
+    year: "2025",
+    description: "A financial management app designed to give you complete control over your finances. With intuitive transaction logging, organized savings, and powerful financial management tools, Savvy is here to help you achieve your financial goals more easily.",
+    tech: ["Next.js", "TypeScript", "Shadcn UI", "Tailwind"],
+    thumbnail: "/thumbnail-3.png",
+    images: ["/savvy-1.png", "/savvy-2.png", "/savvy-3.png"],
+  },
 ];

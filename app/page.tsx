@@ -1,10 +1,18 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { IntroductionSelf } from "./_components/introduction-self";
 import { ProfileImage } from "./_components/profile-section";
 import { ProfileText } from "./_components/profile-section";
 
 export default function Home() {
+  const pathname = usePathname();
+
   return (
-    <div className="min-h-screen flex flex-col pt-[72px] md:pt-[112px] bg-white">
+    <div
+      key={pathname}
+      className="min-h-screen flex flex-col pt-[72px] md:pt-[112px] bg-white"
+    >
 
       {/* Gunakan flex-row agar teks di kiri dan gambar di kanan berbagi ruang */}
       <div className="flex-1 flex flex-col md:flex-row w-full relative">

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "@studio-freight/lenis";
 import { experiences } from "@/libs/data.experiences";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,124 +12,124 @@ const bioText = "DRIVEN BY A PASSION FOR BUILDING IMPACTFUL AND SCALABLE DIGITAL
 
 export const IntroductionSelf = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const rafId = useRef<number | null>(null);
+  const ctxRef = useRef<gsap.Context | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // --- Setup Lenis Smooth Scroll ---
-    const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
+    // Bersihkan semua trigger lama sebelum setup ulang
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    if (ctxRef.current) {
+      ctxRef.current.revert();
+      ctxRef.current = null;
+    }
+
+    if (!sectionRef.current) return;
+
+    // Reset state elemen agar animasi bisa ulang
+    const headings = sectionRef.current.querySelectorAll(".reveal-heading");
+    headings.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));
+
+    const chars = sectionRef.current.querySelectorAll(".char-reveal");
+    chars.forEach((char) => gsap.set(char, { opacity: 0.1 }));
+
+    const paragraphs = sectionRef.current.querySelectorAll(".reveal-text-words");
+    paragraphs.forEach((paragraph) => {
+      // Simpan text asli hanya sekali
+      const originalText =
+        paragraph.getAttribute("data-original-text") || paragraph.textContent || "";
+      paragraph.setAttribute("data-original-text", originalText);
+
+      const words = originalText.trim().split(/\s+/);
+      paragraph.innerHTML = words
+        .map((word) => `<span class="word-reveal">${word}</span>`)
+        .join(" ");
+
+      const wordSpans = paragraph.querySelectorAll(".word-reveal");
+      wordSpans.forEach((span) => gsap.set(span, { opacity: 0, y: 20 }));
     });
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId.current = requestAnimationFrame(raf);
-    };
-    rafId.current = requestAnimationFrame(raf);
+    // Delay kecil untuk pastikan DOM siap sebelum ScrollTrigger di-refresh
+    const timeoutId = setTimeout(() => {
+      ctxRef.current = gsap.context(() => {
+        if (!sectionRef.current) return;
 
-    lenis.on("scroll", ScrollTrigger.update);
+        // 1. Animasi Heading
+        const headingEls = sectionRef.current.querySelectorAll(".reveal-heading");
+        headingEls.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                refreshPriority: -1,
+              },
+            }
+          );
+        });
 
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (typeof value === "number") {
-          lenis.scrollTo(value);
+        // 2. Animasi per huruf
+        const charEls = sectionRef.current.querySelectorAll(".char-reveal");
+        if (charEls.length > 0) {
+          gsap.fromTo(
+            charEls,
+            { opacity: 0.1 },
+            {
+              opacity: 1,
+              ease: "none",
+              stagger: 0.1,
+              scrollTrigger: {
+                trigger: charEls[0].parentElement,
+                start: "top 75%",
+                end: "bottom 50%",
+                scrub: 1,
+                refreshPriority: -1,
+              },
+            }
+          );
         }
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-      pinType: document.body.style.transform ? "transform" : "fixed",
-    });
 
-    // --- GSAP Context ---
-    const ctx = gsap.context(() => {
-      if (!sectionRef.current) return;
+        // 3. Animasi per kata
+        const paragraphEls = sectionRef.current.querySelectorAll(".reveal-text-words");
+        paragraphEls.forEach((paragraph) => {
+          const wordSpans = paragraph.querySelectorAll(".word-reveal");
+          gsap.fromTo(
+            wordSpans,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.08,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: paragraph,
+                start: "top 70%",
+                markers: false,
+                refreshPriority: -1,
+              },
+            }
+          );
+        });
 
-      // 1. Animasi Heading (Judul Section)
-      const headings = sectionRef.current.querySelectorAll(".reveal-heading");
-      headings.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-            },
-          }
-        );
-      });
-
-      // 2. LOGIKA BARU: SCRUBBING TEXT (Per Huruf)
-      const chars = sectionRef.current.querySelectorAll(".char-reveal");
-      if (chars.length > 0) {
-        gsap.fromTo(
-          chars,
-          { opacity: 0.1 }, // Mulai samar (0.1)
-          {
-            opacity: 1,     // Jadi jelas (1)
-            ease: "none",
-            stagger: 0.1,   // Jarak antar huruf dalam timeline scroll
-            scrollTrigger: {
-              trigger: chars[0].parentElement, // Trigger: <p> wrapper
-              start: "top 75%",                // Mulai animasi
-              end: "bottom 50%",               // Selesai animasi
-              scrub: 1,                        // Mulus (smooth 1s)
-            },
-          }
-        );
-      }
-
-      // 3. Animasi Per Kata (Teknologi / Contact Email)
-      const paragraphs = sectionRef.current.querySelectorAll(".reveal-text-words");
-      paragraphs.forEach((paragraph) => {
-        if (paragraph.getAttribute("data-words-ready") === "true") return;
-        const text = paragraph.textContent || "";
-        const words = text.trim().split(/\s+/);
-
-        paragraph.innerHTML = words
-          .map((word) => `<span class="word-reveal">${word}</span>`)
-          .join(" ");
-        paragraph.setAttribute("data-words-ready", "true");
-
-        const wordSpans = paragraph.querySelectorAll(".word-reveal");
-        gsap.fromTo(
-          wordSpans,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.08,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: paragraph,
-              start: "top 70%",
-              markers: false,
-            },
-          }
-        );
-      });
-
-    }, sectionRef);
+        ScrollTrigger.refresh();
+      }, sectionRef);
+    }, 50);
 
     return () => {
-      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
-      lenis.destroy();
-      ctx.revert();
+      clearTimeout(timeoutId);
+      if (ctxRef.current) {
+        ctxRef.current.revert();
+        ctxRef.current = null;
+      }
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <section
@@ -159,7 +159,7 @@ export const IntroductionSelf = () => {
       <section className="px-4 md:px-8 py-20 bg-white">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
           <p className="text-[10px] font-mono mt-4 md:mt-0 max-w-[150px] uppercase text-right text-gray-400">
-            // My professional timeline.
+            My professional timeline.
           </p>
         </div>
 
@@ -208,9 +208,7 @@ export const IntroductionSelf = () => {
         </h1>
         <div className="flex flex-col items-center justify-center space-y-8">
           <a
-            href="https://www.linkedin.com/in/rizqifajri"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:rizqifajri51@gmail.com"
             className="reveal-text-words group relative inline-block text-center uppercase font-black tracking-tighter text-xl md:text-5xl leading-none transition-all duration-700 ease-in-out"
           >
             <span className="relative z-10 transition-all duration-700 ease-in-out">

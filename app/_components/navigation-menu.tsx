@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Lenis from "@studio-freight/lenis";
 
 export const NaviagationMenu = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isInContactSection, setIsInContactSection] = useState(false);
   const lenisRef = useRef<Lenis | null>(null);
@@ -52,7 +51,6 @@ export const NaviagationMenu = () => {
   // Track if we're in contact section using Intersection Observer
   useEffect(() => {
     if (pathname !== "/") {
-      setIsInContactSection(false);
       return;
     }
 
@@ -184,7 +182,7 @@ export const NaviagationMenu = () => {
               const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               const isContact = item.label === "CONTACT";
               // Contact is active only when in contact section
-              const contactIsActive = isContact && isInContactSection;
+              const contactIsActive = isContact && pathname === "/" && isInContactSection;
 
               return (
                 <li key={item.label} className="group">
@@ -192,27 +190,24 @@ export const NaviagationMenu = () => {
                     <Link
                       href="/#contact"
                       onClick={handleContactClick}
-                      className={`${
-                        contactIsActive ? "text-black opacity-100" : "text-black opacity-20 hover:opacity-100"
-                      } inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1 cursor-pointer`}
+                      className={`${contactIsActive ? "text-black opacity-100" : "text-black opacity-20 hover:opacity-100"
+                        } inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1 cursor-pointer`}
                     >
                       {item.label}
                     </Link>
                   ) : (
                     <Link
                       href={item.href}
-                      className={`${
-                        isActive ? "text-black opacity-100" : "text-black opacity-20 hover:opacity-100"
-                      } inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1`}
+                      className={`${isActive ? "text-black opacity-100" : "text-black opacity-20 hover:opacity-100"
+                        } inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1`}
                     >
                       {item.label}
                     </Link>
                   )}
                   {index < menuItems.length - 1 && (
                     <span
-                      className={`${
-                        (isActive || contactIsActive) ? "text-black" : "text-gray-400"
-                      } transition-colors duration-300 group-hover:text-black`}
+                      className={`${(isActive || contactIsActive) ? "text-black" : "text-gray-400"
+                        } transition-colors duration-300 group-hover:text-black`}
                     >
                       ,
                     </span>
@@ -222,15 +217,15 @@ export const NaviagationMenu = () => {
             })}
           </ul>
           <div className="group">
-            <Link
-              href="/#contact"
-              onClick={handleContactClick}
-              className={`${
-                isInContactSection ? "opacity-100" : "opacity-20"
-              } text-black font-bold uppercase text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:opacity-100 group-hover:-translate-y-1 cursor-pointer`}
+            <a
+              href="https://www.linkedin.com/in/rizqifajri"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${isInContactSection ? "opacity-100" : "opacity-20"
+                } text-black font-bold uppercase text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:opacity-100 group-hover:-translate-y-1 cursor-pointer`}
             >
               GET IN TOUCH
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -257,7 +252,7 @@ export const NaviagationMenu = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-white shadow-xl overflow-y-auto">
           <div className="flex flex-col p-8 h-full">
             <div className="flex justify-between items-center mb-12">
-              <div className="text-2xl font-bold">R</div>
+              <div className="text-2xl font-bold">QQ</div>
               <button onClick={closeMenu} className="text-3xl font-bold leading-none">×</button>
             </div>
 
@@ -266,7 +261,7 @@ export const NaviagationMenu = () => {
                 const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
                 const isContact = item.label === "CONTACT";
                 const contactIsActive = isContact && isInContactSection;
-                
+
                 return (
                   <li key={item.label} className="group">
                     {isContact ? (
@@ -276,9 +271,8 @@ export const NaviagationMenu = () => {
                           e.preventDefault();
                           handleContactClick(e);
                         }}
-                        className={`${
-                          contactIsActive ? "text-black" : "text-gray-400"
-                        } text-3xl font-bold uppercase tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1 cursor-pointer`}
+                        className={`${contactIsActive ? "text-black" : "text-gray-400"
+                          } text-3xl font-bold uppercase tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1 cursor-pointer`}
                       >
                         {item.label}
                       </Link>
@@ -286,9 +280,8 @@ export const NaviagationMenu = () => {
                       <Link
                         href={item.href}
                         onClick={closeMenu}
-                        className={`${
-                          isActive ? "text-black" : "text-gray-400"
-                        } text-3xl font-bold uppercase tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1`}
+                        className={`${isActive ? "text-black" : "text-gray-400"
+                          } text-3xl font-bold uppercase tracking-tight inline-block transition-all duration-300 group-hover:text-black group-hover:-translate-y-1`}
                       >
                         {item.label}
                       </Link>
@@ -298,14 +291,23 @@ export const NaviagationMenu = () => {
               })}
             </ul>
 
-            {/* Social Links tetap sama */}
             <div className="mt-auto pt-12 border-t border-gray-200">
               <ul className="flex flex-col gap-4">
-                {["TWITTER", "INSTAGRAM", "LINKEDIN", "EMAIL"].map((social) => (
-                  <li key={social} className="group">
-                    <Link href={`/${social.toLowerCase()}`} className="text-sm font-bold uppercase tracking-tight text-black inline-block transition-all duration-300 group-hover:text-gray-600 group-hover:-translate-y-1">
-                      {social}
-                    </Link>
+                {[
+                  { label: "INSTAGRAM", href: "https://www.instagram.com/rizqifajriii" },
+                  { label: "LINKEDIN", href: "https://www.linkedin.com/in/rizqifajri" },
+                  { label: "EMAIL", href: "mailto:rizqifajri51@gmail.com" },
+                ].map((social) => (
+                  <li key={social.label} className="group">
+                    <a
+                      href={social.href}
+                      target={social.href.startsWith("http") ? "_blank" : undefined}
+                      rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      onClick={closeMenu}
+                      className="text-sm font-bold uppercase tracking-tight text-black inline-block transition-all duration-300 group-hover:text-gray-600 group-hover:-translate-y-1"
+                    >
+                      {social.label}
+                    </a>
                   </li>
                 ))}
               </ul>
