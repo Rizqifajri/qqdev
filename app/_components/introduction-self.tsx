@@ -4,14 +4,18 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
+import { experiences } from "@/libs/data.experiences";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const bioText = "DRIVEN BY A PASSION FOR BUILDING IMPACTFUL AND SCALABLE DIGITAL SOLUTIONS, I’VE BEEN CRAFTING MODERN WEB APPLICATIONS USING CLEAN CODE AND THOUGHTFUL DESIGN. WITH HANDS-ON EXPERIENCE IN FRONTEND AND FULL-STACK DEVELOPMENT, I ENJOY TURNING IDEAS INTO FUNCTIONAL PRODUCTS THROUGH SMOOTH USER INTERFACES AND RELIABLE SYSTEMS. FROM INTERNAL PLATFORMS TO AI-POWERED APPLICATIONS, I’VE WORKED ON REAL-WORLD PROJECTS THAT SOLVE PRACTICAL PROBLEMS. NOW, I CONTINUE TO GROW AS A SOFTWARE ENGINEER, FOCUSING ON DELIVERING MEANINGFUL DIGITAL EXPERIENCES THROUGH TECHNOLOGY.";
 
 export const IntroductionSelf = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const rafId = useRef<number | null>(null);
 
   useEffect(() => {
+    // --- Setup Lenis Smooth Scroll ---
     const lenis = new Lenis({
       lerp: 0.08,
       smoothWheel: true,
@@ -43,9 +47,11 @@ export const IntroductionSelf = () => {
       pinType: document.body.style.transform ? "transform" : "fixed",
     });
 
+    // --- GSAP Context ---
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
+      // 1. Animasi Heading (Judul Section)
       const headings = sectionRef.current.querySelectorAll(".reveal-heading");
       headings.forEach((el) => {
         gsap.fromTo(
@@ -64,6 +70,27 @@ export const IntroductionSelf = () => {
         );
       });
 
+      // 2. LOGIKA BARU: SCRUBBING TEXT (Per Huruf)
+      const chars = sectionRef.current.querySelectorAll(".char-reveal");
+      if (chars.length > 0) {
+        gsap.fromTo(
+          chars,
+          { opacity: 0.1 }, // Mulai samar (0.1)
+          {
+            opacity: 1,     // Jadi jelas (1)
+            ease: "none",
+            stagger: 0.1,   // Jarak antar huruf dalam timeline scroll
+            scrollTrigger: {
+              trigger: chars[0].parentElement, // Trigger: <p> wrapper
+              start: "top 75%",                // Mulai animasi
+              end: "bottom 50%",               // Selesai animasi
+              scrub: 1,                        // Mulus (smooth 1s)
+            },
+          }
+        );
+      }
+
+      // 3. Animasi Per Kata (Teknologi / Contact Email)
       const paragraphs = sectionRef.current.querySelectorAll(".reveal-text-words");
       paragraphs.forEach((paragraph) => {
         if (paragraph.getAttribute("data-words-ready") === "true") return;
@@ -94,29 +121,10 @@ export const IntroductionSelf = () => {
         );
       });
 
-      const elements = sectionRef.current.querySelectorAll(".reveal-text:not(.reveal-text-words)");
-      elements.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 80%",
-            },
-          }
-        );
-      });
     }, sectionRef);
 
     return () => {
-      if (rafId.current !== null) {
-        cancelAnimationFrame(rafId.current);
-      }
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
       lenis.destroy();
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -128,60 +136,95 @@ export const IntroductionSelf = () => {
       ref={sectionRef}
       className="flex flex-col md:pt-32 px-6 sm:px-12 md:px-24"
     >
+      {/* BIO SECTION */}
       <div>
         <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
           MYSELF
         </h1>
 
-        <p className="reveal-text-words text-center uppercase font-extrabold md:leading-[2.6rem] tracking-wide text-sm sm:text-3xl lg:text-5xl mx-auto max-w-9xl">
-          DRIVEN BY THE DESIRE TO CREATE UNIQUE AND MEMORABLE DIGITAL EXPERIENCES, I&rsquo;VE
-          BUILT A CAREER IN CREATIVE DEVELOPMENT — BRINGING PIXELS TO LIFE WITH STYLE AND
-          PURPOSE. RECOGNIZED FOR MY SENSE OF SMOOTH ANIMATIONS AND ENGAGING
-          INTERACTIONS, I&rsquo;VE HAD THE CHANCE TO WORK WITH AMAZING COMPANIES WORLDWIDE.
-          NOW, AS A CO-FOUNDER OF PROPAGANDE, OUR NEW CREATIVE WEB DEVELOPMENT STUDIO,
-          I&rsquo;M TAKING THINGS TO THE NEXT LEVEL. CHECK OUT MY WORK AND SEE WHERE THIS
-          JOURNEY HAS TAKEN ME.
+        <p className="text-center uppercase font-extrabold md:leading-[2.6rem] tracking-wide text-sm sm:text-3xl lg:text-5xl mx-auto max-w-9xl">
+          {bioText.split("").map((char, index) => (
+            <span
+              key={index}
+              className="char-reveal inline-block"
+              style={{ minWidth: char === " " ? "0.3em" : "0" }}
+            >
+              {char}
+            </span>
+          ))}
         </p>
       </div>
 
+      {/* EXPERIENCE SECTION */}
+      <section className="px-4 md:px-8 py-20 bg-white">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
+          <p className="text-[10px] font-mono mt-4 md:mt-0 max-w-[150px] uppercase text-right text-gray-400">
+            // My professional timeline.
+          </p>
+        </div>
+
+        <div className="flex flex-col">
+          {experiences.map((exp) => (
+            <div
+              key={exp.id}
+              className="group grid grid-cols-1 md:grid-cols-12 gap-6 py-12 border-b border-black hover:bg-black hover:text-white transition-all duration-500 px-4"
+            >
+              <div className="md:col-span-2">
+                <span className="font-mono text-[10px] block mb-2 opacity-50 group-hover:opacity-100">[{exp.id}]</span>
+                <p className="font-mono text-[10px] uppercase tracking-widest">{exp.period}</p>
+              </div>
+              <div className="md:col-span-5">
+                <h3 className="text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-none mb-2">
+                  {exp.role}
+                </h3>
+                <p className="text-xl font-medium uppercase opacity-50 group-hover:opacity-100 tracking-tight">
+                  @ {exp.company}
+                </p>
+              </div>
+              <div className="md:col-span-5 flex items-center">
+                <p className="text-sm md:text-lg leading-snug max-w-md">
+                  {exp.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TECH SECTION */}
       <div>
         <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
           TECHNOLOGIES
         </h1>
-
         <p className="reveal-text-words text-center uppercase font-extrabold md:leading-[2.6rem] tracking-wide text-sm sm:text-2xl lg:text-5xl mx-auto max-w-9xl">
           TYPESCRIPT / NEXTJS / GSAP / VERCEL / EXPRESS
         </p>
       </div>
 
       {/* CONTACT SECTION */}
-      <div className="mb-32 mt-24">
+      <div id="contact" className="mb-32 mt-24 scroll-mt-32 md:scroll-mt-40">
         <h1 className="text-center font-light text-md my-12 tracking-[0.3em] reveal-heading text-gray-400">
           GET IN TOUCH
         </h1>
-
         <div className="flex flex-col items-center justify-center space-y-8">
-          {/* Email Besar dengan Hover Effect */}
           <a
-            href="mailto:rizqifajri51@gmail.com"
-            className="reveal-text-words group relative inline-block text-center uppercase font-black tracking-tighter text-xl md:text-5xl  leading-none transition-all duration-700 ease-in-out"
+            href="https://www.linkedin.com/in/rizqifajri"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="reveal-text-words group relative inline-block text-center uppercase font-black tracking-tighter text-xl md:text-5xl leading-none transition-all duration-700 ease-in-out"
           >
-            {/* Hilangkan class 'underline' di sini agar tidak tabrakan dengan animasi */}
             <span className="relative z-10 transition-all duration-700 ease-in-out">
               rizqifajri51@gmail.com
             </span>
-
-            {/* Garis bawah animasi: Pastikan ada h-[2px] dan duration yang pas */}
             <div className="absolute bottom-[-4px] left-0 h-[2px] w-0 bg-black transition-all duration-700 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:w-full"></div>
           </a>
 
-          {/* Social Links Grid */}
           <div className="reveal-heading grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12 pt-12 border-t border-gray-100 w-full max-w-5xl">
             {[
-              { label: "LINKEDIN", href: "#" },
-              { label: "INSTAGRAM", href: "#" },
-              { label: "TWITTER", href: "#" },
-              { label: "GITHUB", href: "#" },
+              { label: "LINKEDIN", href: "https://www.linkedin.com/in/rizqifajri" },
+              { label: "INSTAGRAM", href: "https://www.instagram.com/rizqifajriii" },
+              { label: "GITHUB", href: "https://github.com/Rizqifajri" },
+              { label: "Medium", href: "https://medium.com/@rizqifajri" },
             ].map((social) => (
               <a
                 key={social.label}
@@ -193,13 +236,6 @@ export const IntroductionSelf = () => {
             ))}
           </div>
         </div>
-
-        {/* Footer Credit ala Agency
-        <div className="reveal-heading flex flex-col md:flex-row justify-between items-center mt-32 pt-8 border-t border-gray-100 font-mono text-[10px] text-gray-400 uppercase tracking-widest">
-          <p>© 2026 RIZQI FAJRI — ALL RIGHTS RESERVED</p>
-          <p>JAKARTA, ID — 1:31 AM</p>
-          <p>DESIGNED BY RIZQI FAJRI</p>
-        </div> */}
       </div>
     </section>
   );

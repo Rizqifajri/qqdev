@@ -6,67 +6,56 @@ export interface Project {
   year: string;
   description: string;
   tech: string[];
-  image: string;      // Thumbnail utama
-  gallery: string[];  // Tambahan: Array gambar untuk scroll ke bawah
+  thumbnail: string;  // Thumbnail untuk halaman works listing
+  images: string[];   // Array gambar untuk halaman detail [id]
   carbon?: string;    // Opsional: Detail teknis tambahan gaya agency
 }
 
 export const projects: Project[] = [
   {
     id: "01",
-    title: "DefiLlama Adapter",
-    category: "Development / Blockchain",
-    client: "DEFILLAMA.COM",
-    year: "2026",
-    description: "Building autonomous data adapters and high-performance dashboard interfaces for global TVL tracking.",
-    tech: ["Next.js", "TypeScript", "Ethers.js"],
-    image: "/project1.jpg",
-    gallery: ["/project1-detail1.jpg", "/project1-detail2.jpg"], 
+    title: "Ticketing System",
+    category: "Fullstack",
+    client: "cretivox.com",
+    year: "2025",
+    description: "An end-to-end ticketing system featuring seamless booking, automated QR code distribution, and a real-time scanner dashboard for efficient attendee check-in.",
+    tech: ["Next.js", "TypeScript", "Shadcn UI"],
+    thumbnail: "/thumbnail-1.png",
+    images: ["/scanner-ticketings.png", "/ticketing-email.png"],
     carbon: "0.12 G/CO2 [A]"
   },
   {
     id: "02",
-    title: "HRIS Internal",
-    category: "Fullstack / Internal Tool",
-    client: "CRETIVOX",
-    year: "2024",
+    title: "HRIS Cretivox",
+    category: "Frontend / Dashboard",
+    client: "cretivox.com",
+    year: "2025",
     description: "Custom in-house HRIS resulting in 100% cost saving by eliminating third-party software dependencies.",
-    tech: ["React", "PostgreSQL", "Tailwind"],
-    image: "/project2.jpg",
-    gallery: ["/project2-ss1.jpg", "/project2-ss2.jpg"],
+    tech: ["Next.js", "Recharts", "Tailwind", "Shadcn UI"],
+    thumbnail: "/career-web.png",
+    images: ["/career-web.png", "/employee-survey.png", "/hris-dashboard-1.png", "/applicant-mng.png"],
     carbon: "0.45 G/CO2 [B]"
   },
   {
     id: "03",
-    title: "Agency Design",
-    category: "UI/UX Design / Agency",
-    client: "PERSONAL",
+    title: "Company Profile & CMS Article Posting",
+    category: "Frontend / CMS",
+    client: "DOT indonesia | nortis",
     year: "2025",
-    description: "Minimalist agency-style portfolio featuring strict grid systems and bold aesthetic.",
-    tech: ["Next.js", "Framer Motion"],
-    image: "/project3.jpg",
-    gallery: ["/project3-mockup1.jpg"],
+    description: "Company profle with a dynamic CMS for article publish.",
+    tech: ["Next.js", "Tailwind", "Framer Motion", "Shadcn UI"],
+    thumbnail: "/thumbnail-2.png",
+    images: ["/nortis-web.png"],
   },
   {
     id: "04",
-    title: "Project Delta",
-    category: "Branding / Identity",
-    client: "CLIENT X",
+    title: "Kareerly Job Recommendation",
+    category: "Fullstack",
+    client: "Personal Project",
     year: "2025",
-    description: "Strategic branding and digital identity focusing on modern visual storytelling.",
-    tech: ["Illustrator", "Next.js"],
-    image: "/project4.jpg",
-    gallery: ["/project4-logo.jpg", "/project4-ui.jpg"],
-  },
-  {
-    id: "05",
-    title: "Project Epsilon",
-    category: "Agency Work / Luxury",
-    client: "CLIENT Y",
-    year: "2026",
-    description: "High-end digital experience and immersive web solutions for luxury market segments.",
-    tech: ["Webgl", "Three.js"],
-    image: "/project5.jpg",
-    gallery: ["/project5-render1.jpg"],
+    description: "Job recommendation with core features conversiational chatbot and CV analyzer that maps skills to potential job roles",
+    tech: ["Next.js", "TypeScript", "Shadcn UI", "Tailwind"],
+    thumbnail: "/kareerly-1.png",
+    images: ["/kareerly-1.png", "/kareerly-2.png"],
   },
 ];

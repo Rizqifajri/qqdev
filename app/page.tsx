@@ -1,16 +1,14 @@
 import { IntroductionSelf } from "./_components/introduction-self";
-import { NaviagationMenu } from "./_components/navigation-menu";
 import { ProfileImage } from "./_components/profile-section";
 import { ProfileText } from "./_components/profile-section";
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col pt-[72px] md:pt-[112px] bg-white">
-      <NaviagationMenu />
 
       {/* Gunakan flex-row agar teks di kiri dan gambar di kanan berbagi ruang */}
       <div className="flex-1 flex flex-col md:flex-row w-full relative">
-        
+
         {/* Sisi Kiri: Teks */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <ProfileImage mobileOnly />
@@ -26,6 +24,7 @@ export default function Home() {
       </div>
 
       <IntroductionSelf />
+
     </div>
   );
 }

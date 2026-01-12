@@ -41,11 +41,11 @@ export const ProfileImage = ({ mobileOnly = false }: { mobileOnly?: boolean }) =
 export const ProfileText = () => {
   return (
     // md:flex-1 memastikan teks hanya mengambil ruang yang tersisa dan tidak menabrak gambar
-    <div className="w-full p-6 md:p-12 lg:p-16 flex-1 flex flex-col justify-end min-h-[50vh] md:min-h-screen">
+    <div className="w-full p-6 md:p-12 lg:p-16 flex-1 flex flex-col justify-end  md:min-h-screen">
       <h1 className="text-[10vw] md:text-[5vw] lg:text-[4.8vw] xl:text-[5vw] font-semibold uppercase tracking-tighter leading-[0.85] text-black">
         HI. I&apos;M RIZQI FAJRI - <br className="hidden md:block" />
-        A 22 YEARS OLD <br className="hidden lg:block" />
-        INDONESIA FRONTEND DEVELOPER
+        CREATIVE <br className="hidden lg:block" />
+        SOFTWARE DEVELOPER
       </h1>
     </div>
   )

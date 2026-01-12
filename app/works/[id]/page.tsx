@@ -7,12 +7,12 @@ import { NaviagationMenu } from "@/app/_components/navigation-menu";
 // Import navigasi utama kamu
 
 
-export default async function ProjectDetail({ 
-  params 
-}: { 
-  params: Promise<{ id: string }> 
+export default async function ProjectDetail({
+  params
+}: {
+  params: Promise<{ id: string }>
 }) {
-  
+
   const { id } = await params;
   const project = projects.find((p) => p.id === id);
 
@@ -30,11 +30,11 @@ export default async function ProjectDetail({
             <h1 className="text-6xl md:text-7xl font-bold uppercase tracking-tighter mb-12 leading-[0.9]">
               {project.title}
             </h1>
-            
+
             <div className="space-y-4 text-[10px] font-mono uppercase">
               <div className="grid grid-cols-2 py-4 border-t border-gray-100">
-                <span className="text-gray-400">Year</span>
-                <span className="font-bold">{project.year}</span>
+                <span className="text-gray-400">Tech</span>
+                <span className="font-bold">{project.tech.join(", ")}</span>
               </div>
               <div className="grid grid-cols-2 py-4 border-t border-gray-100">
                 <span className="text-gray-400">Role</span>
@@ -56,32 +56,22 @@ export default async function ProjectDetail({
 
         {/* KANAN: Gallery Scrollable */}
         <div className="w-full md:w-[60%] flex flex-col bg-gray-50/50">
-          {/* Main Image */}
-          <div className="relative w-full aspect-[16/10] border-b border-gray-100 bg-white">
-            <Image 
-              src={project.image} 
-              alt={project.title} 
-              fill 
-              className="object-cover" 
-              priority 
-            />
-          </div>
-
-          {/* Gallery Images */}
-          {project.gallery.map((img, idx) => (
+          {/* Images Gallery */}
+          {project.images.map((img, idx) => (
             <div key={idx} className="relative w-full aspect-[16/10] border-b border-gray-100 bg-white">
-              <Image 
-                src={img} 
-                alt={`${project.title} screenshot ${idx}`} 
-                fill 
-                className="object-cover" 
+              <Image
+                src={img}
+                alt={`${project.title} screenshot ${idx + 1}`}
+                fill
+                className="object-cover"
+                priority={idx === 0}
               />
             </div>
           ))}
 
           {/* Footer Navigation */}
-          <Link 
-            href={`/works/${nextProject.id}`} 
+          <Link
+            href={`/works/${nextProject.id}`}
             className="group py-40 flex flex-col items-center justify-center bg-black text-white hover:bg-zinc-900 transition-all duration-500 uppercase font-bold text-sm tracking-[0.3em]"
           >
             <span className="text-[10px] font-mono mb-4 opacity-40 group-hover:opacity-100">Next Project</span>
