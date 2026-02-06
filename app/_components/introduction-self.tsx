@@ -9,7 +9,7 @@ import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const bioText = "DRIVEN BY A PASSION FOR BUILDING IMPACTFUL AND SCALABLE DIGITAL SOLUTIONS, I’VE BEEN CRAFTING MODERN WEB APPLICATIONS USING CLEAN CODE AND THOUGHTFUL DESIGN. WITH HANDS-ON EXPERIENCE IN FRONTEND AND FULL-STACK DEVELOPMENT, I ENJOY TURNING IDEAS INTO FUNCTIONAL PRODUCTS THROUGH SMOOTH USER INTERFACES AND RELIABLE SYSTEMS. FROM INTERNAL PLATFORMS TO AI-POWERED APPLICATIONS, I’VE WORKED ON REAL-WORLD PROJECTS THAT SOLVE PRACTICAL PROBLEMS. NOW, I CONTINUE TO GROW AS A SOFTWARE ENGINEER, FOCUSING ON DELIVERING MEANINGFUL DIGITAL EXPERIENCES THROUGH TECHNOLOGY.";
+const bioText = "Driven by a passion for building impactful and scalable digital solutions, I’ve been crafting modern web applications using clean code and thoughtful design. With hands-on experience in frontend and full-stack development, I enjoy turning ideas into functional products through smooth user interfaces and reliable systems. From internal platforms to AI-powered applications, I’ve worked on real-world projects that solve practical problems. Now, I continue to grow as a software engineer, focusing on delivering meaningful digital experiences through technology.";
 
 export const IntroductionSelf = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -143,7 +143,7 @@ export const IntroductionSelf = () => {
           MYSELF
         </h1>
 
-        <p className="text-center uppercase font-extrabold md:leading-[2.6rem] tracking-wide text-sm sm:text-3xl lg:text-5xl mx-auto max-w-9xl">
+        <p className="text-left font-light  tracking-wide text-sm sm:text-3xl lg:text-4xl mx-auto max-w-9xl">
           {bioText.split("").map((char, index) => (
             <span
               key={index}
@@ -162,7 +162,7 @@ export const IntroductionSelf = () => {
           PROFESIONAL EXPERIENCES
         </h1>
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
-        
+
         </div>
 
         <div className="flex flex-col">
