@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { experiences } from "@/libs/data.experiences";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -157,10 +158,11 @@ export const IntroductionSelf = () => {
 
       {/* EXPERIENCE SECTION */}
       <section className="px-4 md:px-8 py-20 bg-white">
+        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
+          PROFESIONAL EXPERIENCES
+        </h1>
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
-          <p className="text-[10px] font-mono mt-4 md:mt-0 max-w-[150px] uppercase text-right text-gray-400">
-            My professional timeline.
-          </p>
+        
         </div>
 
         <div className="flex flex-col">
@@ -192,13 +194,45 @@ export const IntroductionSelf = () => {
       </section>
 
       {/* TECH SECTION */}
-      <div>
-        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
+      <div className="flex flex-col items-center">
+        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading text-gray-400">
           TECHNOLOGIES
         </h1>
-        <p className="reveal-text-words text-center uppercase font-extrabold md:leading-[2.6rem] tracking-wide text-sm sm:text-2xl lg:text-5xl mx-auto max-w-9xl">
-          TYPESCRIPT / NEXTJS / GSAP / VERCEL / EXPRESS
-        </p>
+
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12 max-w-6xl px-4">
+          {[
+            { src: "https://skillicons.dev/icons?i=ts", alt: "TypeScript" },
+            { src: "https://skillicons.dev/icons?i=nextjs", alt: "Next.js" },
+            { src: "https://skillicons.dev/icons?i=react", alt: "React" },
+            { src: "https://skillicons.dev/icons?i=tailwind", alt: "Tailwind CSS" },
+
+            { src: "https://skillicons.dev/icons?i=nestjs", alt: "NestJS" },
+            { src: "https://skillicons.dev/icons?i=prisma", alt: "Prisma ORM" },
+            { src: "https://skillicons.dev/icons?i=firebase", alt: "Firebase" },
+            { src: "https://skillicons.dev/icons?i=go", alt: "Go" },
+            { src: "https://skillicons.dev/icons?i=py", alt: "Python" },
+            { src: "https://skillicons.dev/icons?i=fastapi", alt: "FastAPI" },
+            { src: "https://skillicons.dev/icons?i=docker", alt: "Docker" },
+            { src: "https://skillicons.dev/icons?i=git", alt: "Git" },
+            { src: "https://skillicons.dev/icons?i=gitlab", alt: "GitLab" },
+            { src: "https://skillicons.dev/icons?i=figma", alt: "Figma" },
+            { src: "https://skillicons.dev/icons?i=postman", alt: "Postman" },
+          ].map((tech, index) => (
+            <div
+              key={index}
+              className="relative w-16 h-16 md:w-20 md:h-20 hover:grayscale-0 transition-all duration-500 transform hover:scale-110"
+            >
+              <Image
+                src={tech.src}
+                alt={tech.alt}
+                unoptimized
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 64px, 80px"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* CONTACT SECTION */}

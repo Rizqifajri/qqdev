@@ -77,7 +77,7 @@ export const ProfileImage = ({ mobileOnly = false }: { mobileOnly?: boolean }) =
             ref={textRef}
             className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.5em] text-black"
           >
-            Creative Frontend Developer
+            Creative Software Developer
           </p>
         </div>
       </div>
