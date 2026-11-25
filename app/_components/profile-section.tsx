@@ -110,7 +110,11 @@ export const ProfileText = () => {
           if (element.tagName === "BR") {
             return element.outerHTML;
           }
-          return Array.from(node.childNodes).map(processNode).join("");
+          const inner = Array.from(node.childNodes).map(processNode).join("");
+          if (element.id === "hero-role-target") {
+            return `<span id="hero-role-target" class="inline-block">${inner}</span>`;
+          }
+          return inner;
         }
         return "";
       };
@@ -145,8 +149,10 @@ export const ProfileText = () => {
         className="text-[10vw] md:text-[5vw] lg:text-[4.8vw] xl:text-[5vw] font-semibold uppercase tracking-tighter leading-[0.85] text-black"
       >
         HI. I&apos;M RIZQI FAJRI - <br className="hidden md:block" />
-        CREATIVE <br className="hidden lg:block" />
-        SOFTWARE DEVELOPER
+        <span id="hero-role-target" className="inline-block">
+          CREATIVE <br className="hidden lg:block" />
+          SOFTWARE DEVELOPER
+        </span>
       </h1>
     </div>
   )

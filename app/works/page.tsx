@@ -1,64 +1,58 @@
 "use client";
 
 import { projects } from "@/libs/data.works";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function WorksPage() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const cardsRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!sectionRef.current || !headingRef.current || !cardsRef.current) return;
+    if (!sectionRef.current || !headingRef.current || !listRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Text reveal animation for "Works" heading
-      const headingChars = headingRef.current?.textContent?.split("") || [];
-      if (headingRef.current && headingChars.length > 0) {
-        headingRef.current.innerHTML = headingChars
-          .map((char) => `<span class="char-reveal inline-block">${char === " " ? "&nbsp;" : char}</span>`)
+      const rawText = headingRef.current?.textContent || "";
+      if (headingRef.current && rawText.length > 0) {
+        headingRef.current.innerHTML = rawText
+          .split("")
+          .map(
+            (char) =>
+              `<span class="char-reveal inline-block">${char === " " ? "&nbsp;" : char}</span>`
+          )
           .join("");
 
         const charSpans = headingRef.current.querySelectorAll(".char-reveal");
         gsap.fromTo(
           charSpans,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
             y: 0,
-            duration: 1.2,
-            stagger: 0.03,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: headingRef.current,
-              start: "top 80%",
-            },
+            duration: 0.9,
+            stagger: 0.04,
+            ease: "power3.out",
           }
         );
       }
 
-      // Card animation - fade in with stagger
-      if (cardsRef.current) {
-        const cards = cardsRef.current.querySelectorAll("a");
+      const rows = listRef.current?.querySelectorAll(".work-row");
+      if (rows && rows.length > 0) {
         gsap.fromTo(
-          cards,
-          { opacity: 0, y: 40 },
+          rows,
+          { opacity: 0, y: 20 },
           {
             opacity: 1,
             y: 0,
-            duration: 1.2,
-            stagger: 0.15,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: cardsRef.current,
-              start: "top 75%",
-            },
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power3.out",
           }
         );
       }
@@ -66,60 +60,89 @@ export default function WorksPage() {
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
     <main ref={sectionRef} className="bg-white text-black min-h-screen font-sans">
-      {/* WORKS SECTION */}
-      <section className="px-4 md:px-8 py-20">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
-          <h2
+      <section className="pt-20 md:pt-28 px-4 md:px-6 pb-20">
+        {/* Header aligned flush with NavigationMenu (px-4 md:px-6) */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-black pb-6 gap-4">
+          <h1
             ref={headingRef}
-            className="text-7xl md:text-9xl font-bold tracking-tighter uppercase leading-none"
+            className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter uppercase leading-none"
           >
             Works
-          </h2>
-          <p className="text-[10px] font-mono mt-4 md:mt-0 max-w-[150px] uppercase text-right">
-            {"// Selected digital craftsmanship."}
-          </p>
+          </h1>
+          <div className="flex items-center justify-between w-full md:w-auto gap-6 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-400">
+            <span>{"// Selected Projects"}</span>
+            <span className="text-black">[0{projects.length}]</span>
+          </div>
         </div>
 
-        <div
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-0 border-l border-t border-black"
-        >
+        {/* Minimalist Typographic List with Hover Description Marquee */}
+        <div ref={listRef} className="flex flex-col">
           {projects.map((project) => (
             <Link
               href={`/works/${project.id}`}
               key={project.id}
-              className="group relative border-r border-b border-black cursor-pointer overflow-hidden bg-white"
+              className="work-row group relative overflow-hidden border-b border-black/15 md:hover:border-black md:hover:bg-black md:hover:text-white transition-colors duration-300"
             >
-              <div className="relative aspect-[4/5]">
-                <Image
-                  src={project.thumbnail}
-                  alt={project.title}
-                  fill
-                  className="object-cover"
-                />
+              {/* Default Row Content */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 md:gap-6 py-6 md:py-9 items-baseline transition-opacity duration-200 md:group-hover:opacity-0">
+                {/* Index & Year (+ mobile View CTA) */}
+                <div className="md:col-span-2 flex items-center justify-between md:justify-start gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-400">
+                  <div className="flex items-center gap-3">
+                    <span>[{project.id}]</span>
+                    <span>{project.year}</span>
+                  </div>
+                  <span className="md:hidden inline-flex items-center gap-1 text-black">
+                    View <ArrowUpRight className="w-3 h-3" />
+                  </span>
+                </div>
+
+                {/* Project Title */}
+                <div className="md:col-span-5">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-tighter leading-[0.95] md:leading-none">
+                    {project.title}
+                  </h2>
+                </div>
+
+                {/* Category & Client */}
+                <div className="md:col-span-3 font-mono text-[10px] uppercase tracking-[0.15em] text-gray-400">
+                  <span>{project.category}</span>
+                  <span className="mx-2">/</span>
+                  <span>{project.client}</span>
+                </div>
+
+                {/* Desktop Action Arrow */}
+                <div className="hidden md:flex md:col-span-2 justify-end items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-400">
+                  <span>View</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </div>
               </div>
-              <div className="p-6 flex justify-between items-end group-hover:bg-black group-hover:text-white transition-colors duration-300">
-                <div>
-                  <span className="text-[10px] font-mono mb-2 block">[{project.id}]</span>
-                  <h3 className="text-2xl font-bold uppercase tracking-tighter leading-tight">{project.title}</h3>
-                  <p className="text-[10px] uppercase font-medium text-gray-400 group-hover:text-gray-300">
-                    {project.category}
-                  </p>
+
+              {/* Hover Looping Marquee (Desktop) */}
+              <div
+                aria-hidden="true"
+                className="hidden md:flex items-center absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none overflow-hidden"
+              >
+                <div className="flex w-max animate-marquee whitespace-nowrap">
+                  {[0, 1, 2, 3].map((copyIdx) => (
+                    <span
+                      key={copyIdx}
+                      className="text-2xl md:text-4xl font-semibold tracking-tight pr-12"
+                    >
+                      {project.description}
+                      <span className="mx-8 opacity-40">—</span>
+                    </span>
+                  ))}
                 </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
-
-      {/* Footer Area for Spacing */}
-      <div className="h-32 bg-white"></div>
     </main>
   );
 }

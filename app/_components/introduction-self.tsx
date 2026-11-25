@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { experiences } from "@/libs/data.experiences";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,21 +75,22 @@ export const IntroductionSelf = () => {
           );
         });
 
-        // 2. Animasi per huruf
+        // 2. Animasi per huruf (CSS sticky container + GSAP ScrollTrigger scrub)
+        const bioSection = sectionRef.current.querySelector(".bio-pin-section");
         const charEls = sectionRef.current.querySelectorAll(".char-reveal");
-        if (charEls.length > 0) {
+        if (bioSection && charEls.length > 0) {
           gsap.fromTo(
             charEls,
             { opacity: 0.1 },
             {
               opacity: 1,
               ease: "none",
-              stagger: 0.1,
+              stagger: 0.05,
               scrollTrigger: {
-                trigger: charEls[0].parentElement,
-                start: "top 75%",
-                end: "bottom 50%",
-                scrub: 1,
+                trigger: bioSection,
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.4,
                 refreshPriority: -1,
               },
             }
@@ -133,58 +135,58 @@ export const IntroductionSelf = () => {
   }, [pathname]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="flex flex-col md:pt-32 px-6 sm:px-12 md:px-24"
-    >
-      {/* BIO SECTION */}
-      <div>
-        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
-          MYSELF
-        </h1>
+    <div ref={sectionRef} className="flex flex-col">
+      <section className="flex flex-col md:pt-32 px-6 sm:px-12 md:px-24">
+        {/* BIO SECTION */}
+        <div className="bio-pin-section relative h-[220vh]">
+          <div className="sticky top-0 min-h-screen flex flex-col justify-center py-12">
+            <h1 className="text-center font-light text-sm md:text-md mb-10 md:mb-16 tracking-[0.3em] reveal-heading">
+              MYSELF
+            </h1>
 
-        <p className="text-left font-light  tracking-wide text-sm sm:text-3xl lg:text-4xl mx-auto max-w-9xl">
-          {bioText.split("").map((char, index) => (
-            <span
-              key={index}
-              className="char-reveal inline-block"
-              style={{ minWidth: char === " " ? "0.3em" : "0" }}
-            >
-              {char}
-            </span>
-          ))}
-        </p>
-      </div>
+            <p className="text-left font-light tracking-wide text-lg sm:text-3xl lg:text-4xl mx-auto max-w-9xl">
+              {bioText.split("").map((char, index) => (
+                <span
+                  key={index}
+                  className="char-reveal inline-block"
+                  style={{ minWidth: char === " " ? "0.3em" : "0" }}
+                >
+                  {char}
+                </span>
+              ))}
+            </p>
+          </div>
+        </div>
 
-      {/* EXPERIENCE SECTION */}
-      <section className="px-4 md:px-8 py-20 bg-white">
-        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading">
+        {/* EXPERIENCE SECTION */}
+      </section>
+
+      <section className="px-4 md:px-6 py-12 md:py-20 bg-white">
+        <h1 className="text-center font-light text-sm md:text-md mt-8 mb-8 md:my-24 tracking-[0.3em] reveal-heading">
           PROFESIONAL EXPERIENCES
         </h1>
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-8">
-
-        </div>
+        <div className="border-b border-black pb-4 md:pb-8" />
 
         <div className="flex flex-col">
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="group grid grid-cols-1 md:grid-cols-12 gap-6 py-12 border-b border-black hover:bg-black hover:text-white transition-all duration-500 px-4"
+              className="group grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 py-6 md:py-12 border-b border-black/15 md:border-black md:hover:bg-black md:hover:text-white md:hover:px-4 transition-all duration-500"
             >
-              <div className="md:col-span-2">
-                <span className="font-mono text-[10px] block mb-2 opacity-50 group-hover:opacity-100">[{exp.id}]</span>
-                <p className="font-mono text-[10px] uppercase tracking-widest">{exp.period}</p>
+              <div className="md:col-span-2 flex md:block items-center justify-between">
+                <span className="font-mono text-[10px] md:block md:mb-2 opacity-50 md:group-hover:opacity-100">[{exp.id}]</span>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-gray-500 md:text-current">{exp.period}</p>
               </div>
               <div className="md:col-span-5">
-                <h3 className="text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-none mb-2">
+                <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold uppercase tracking-tighter leading-[0.95] md:leading-none mb-1 md:mb-2">
                   {exp.role}
                 </h3>
-                <p className="text-xl font-medium uppercase opacity-50 group-hover:opacity-100 tracking-tight">
+                <p className="text-sm sm:text-base md:text-xl font-medium uppercase opacity-60 md:opacity-50 md:group-hover:opacity-100 tracking-tight">
                   @ {exp.company}
                 </p>
               </div>
               <div className="md:col-span-5 flex items-center">
-                <p className="text-sm md:text-lg leading-snug max-w-md">
+                <p className="text-xs sm:text-sm md:text-lg text-gray-600 md:text-current leading-snug max-w-md">
                   {exp.description}
                 </p>
               </div>
@@ -193,82 +195,116 @@ export const IntroductionSelf = () => {
         </div>
       </section>
 
-      {/* TECH SECTION */}
-      <div className="flex flex-col items-center">
-        <h1 className="text-center font-light text-md my-24 tracking-[0.3em] reveal-heading text-gray-400">
-          TECHNOLOGIES
-        </h1>
+      <section className="flex flex-col px-4 md:px-6">
+        {/* TECH SECTION */}
+        <div className="flex flex-col items-center pb-16 md:pb-28">
+          <h1 className="text-center font-light text-sm md:text-md mt-8 mb-10 md:my-24 tracking-[0.3em] reveal-heading text-gray-400">
+            TECHNOLOGIES
+          </h1>
 
-        <div className="flex flex-wrap justify-center gap-8 md:gap-12 max-w-6xl px-4">
-          {[
-            { src: "https://skillicons.dev/icons?i=ts", alt: "TypeScript" },
-            { src: "https://skillicons.dev/icons?i=nextjs", alt: "Next.js" },
-            { src: "https://skillicons.dev/icons?i=react", alt: "React" },
-            { src: "https://skillicons.dev/icons?i=tailwind", alt: "Tailwind CSS" },
-
-            { src: "https://skillicons.dev/icons?i=nestjs", alt: "NestJS" },
-            { src: "https://skillicons.dev/icons?i=prisma", alt: "Prisma ORM" },
-            { src: "https://skillicons.dev/icons?i=firebase", alt: "Firebase" },
-            { src: "https://skillicons.dev/icons?i=go", alt: "Go" },
-            { src: "https://skillicons.dev/icons?i=py", alt: "Python" },
-            { src: "https://skillicons.dev/icons?i=fastapi", alt: "FastAPI" },
-            { src: "https://skillicons.dev/icons?i=docker", alt: "Docker" },
-            { src: "https://skillicons.dev/icons?i=git", alt: "Git" },
-            { src: "https://skillicons.dev/icons?i=gitlab", alt: "GitLab" },
-            { src: "https://skillicons.dev/icons?i=figma", alt: "Figma" },
-            { src: "https://skillicons.dev/icons?i=postman", alt: "Postman" },
-          ].map((tech, index) => (
-            <div
-              key={index}
-              className="relative w-16 h-16 md:w-20 md:h-20 hover:grayscale-0 transition-all duration-500 transform hover:scale-110"
-            >
-              <Image
-                src={tech.src}
-                alt={tech.alt}
-                unoptimized
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 64px, 80px"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* CONTACT SECTION */}
-      <div id="contact" className="mb-32 mt-24 scroll-mt-32 md:scroll-mt-40">
-        <h1 className="text-center font-light text-md my-12 tracking-[0.3em] reveal-heading text-gray-400">
-          GET IN TOUCH
-        </h1>
-        <div className="flex flex-col items-center justify-center space-y-8">
-          <a
-            href="mailto:rizqifajri51@gmail.com"
-            className="reveal-text-words group relative inline-block text-center uppercase font-black tracking-tighter text-xl md:text-5xl leading-none transition-all duration-700 ease-in-out"
-          >
-            <span className="relative z-10 transition-all duration-700 ease-in-out">
-              rizqifajri51@gmail.com
-            </span>
-            <div className="absolute bottom-[-4px] left-0 h-[2px] w-0 bg-black transition-all duration-700 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:w-full"></div>
-          </a>
-
-          <div className="reveal-heading grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12 pt-12 border-t border-gray-100 w-full max-w-5xl">
+          <div className="grid grid-cols-5 md:flex md:flex-wrap md:justify-center gap-4 sm:gap-6 md:gap-10 max-w-5xl w-full justify-items-center">
             {[
-              { label: "LINKEDIN", href: "https://www.linkedin.com/in/rizqifajri" },
-              { label: "INSTAGRAM", href: "https://www.instagram.com/rizqifajriii" },
-              { label: "GITHUB", href: "https://github.com/Rizqifajri" },
-              { label: "Medium", href: "https://medium.com/@rizqifajri" },
-            ].map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className="text-center font-mono text-[10px] sm:text-xs tracking-[0.2em] py-4 border border-transparent hover:border-black transition-all duration-300 uppercase"
+              { src: "https://skillicons.dev/icons?i=ts", alt: "TypeScript" },
+              { src: "https://skillicons.dev/icons?i=nextjs", alt: "Next.js" },
+              { src: "https://skillicons.dev/icons?i=react", alt: "React" },
+              { src: "https://skillicons.dev/icons?i=tailwind", alt: "Tailwind CSS" },
+
+              { src: "https://skillicons.dev/icons?i=nestjs", alt: "NestJS" },
+              { src: "https://skillicons.dev/icons?i=prisma", alt: "Prisma ORM" },
+              { src: "https://skillicons.dev/icons?i=firebase", alt: "Firebase" },
+              { src: "https://skillicons.dev/icons?i=go", alt: "Go" },
+              { src: "https://skillicons.dev/icons?i=py", alt: "Python" },
+              { src: "https://skillicons.dev/icons?i=fastapi", alt: "FastAPI" },
+              { src: "https://skillicons.dev/icons?i=docker", alt: "Docker" },
+              { src: "https://skillicons.dev/icons?i=git", alt: "Git" },
+              { src: "https://skillicons.dev/icons?i=gitlab", alt: "GitLab" },
+              { src: "https://skillicons.dev/icons?i=figma", alt: "Figma" },
+              { src: "https://skillicons.dev/icons?i=postman", alt: "Postman" },
+            ].map((tech, index) => (
+              <div
+                key={index}
+                title={tech.alt}
+                className="relative w-11 h-11 sm:w-12 sm:h-12 md:w-16 md:h-16 grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-110"
               >
-                {social.label} ↗
-              </a>
+                <Image
+                  src={tech.src}
+                  alt={tech.alt}
+                  unoptimized
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 48px, 64px"
+                />
+              </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* FULL-SCREEN CONTACT SECTION */}
+      <section
+        id="contact"
+        className="min-h-screen w-full border-t border-black bg-white text-black flex flex-col justify-between px-4 md:px-6 pt-24 md:pt-28 pb-0 mb-0"
+      >
+        {/* Top Row: Editorial Intro & Vertical Social Stack */}
+        <div className="reveal-heading grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+          <div className="md:col-span-6 space-y-4">
+            <span className="block font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400">
+              {"// Open for Collaborations"}
+            </span>
+            <p className="text-lg sm:text-xl md:text-2xl font-light leading-snug max-w-md text-black">
+              Have a product, system, or idea you&apos;d like to bring to life?
+              Always open to meaningful engineering conversations.
+            </p>
+          </div>
+
+          <div className="md:col-span-6 flex md:justify-end">
+            <ul className="w-full md:w-64 flex flex-col">
+              {[
+                { label: "Email", href: "mailto:rizqifajri51@gmail.com" },
+                { label: "LinkedIn", href: "https://www.linkedin.com/in/rizqifajri" },
+                { label: "GitHub", href: "https://github.com/Rizqifajri" },
+                { label: "Instagram", href: "https://www.instagram.com/rizqifajriii" },
+                { label: "Medium", href: "https://medium.com/@rizqifajrii" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="group flex items-center justify-between py-2.5 border-b border-black/15 hover:border-black transition-colors duration-300 font-mono text-xs uppercase tracking-[0.15em]"
+                  >
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      {link.label}
+                    </span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom-Anchored Typographic CTA */}
+        <div className="mt-auto pt-12">
+          <div className="border-b border-black/15 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-400">
+            <span>Rizqi Fajri — Based in Jakarta, ID</span>
+            <a
+              href="mailto:rizqifajri51@gmail.com"
+              className="text-black hover:underline"
+            >
+              rizqifajri51@gmail.com ↗
+            </a>
+          </div>
+          <a
+            href="mailto:rizqifajri51@gmail.com"
+            className="group block w-full overflow-hidden mb-0 pb-0"
+          >
+            <h2 className="text-[12.6vw] md:text-[12.8vw] whitespace-nowrap font-bold uppercase tracking-tighter leading-[0.75] mb-0 pb-0 text-black transition-all duration-500 group-hover:opacity-80">
+              GET IN TOUCH
+            </h2>
+          </a>
+        </div>
+      </section>
+    </div>
   );
 };

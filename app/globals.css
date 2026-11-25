@@ -20,17 +20,36 @@ body {
 
 .page-enter {
   opacity: 0;
-  transform: translateY(8px);
-  animation: page-fade-in 800ms ease-out 3000ms forwards;
+  animation: page-fade-in 700ms ease-out 2000ms forwards;
 }
 
 @keyframes page-fade-in {
   0% {
     opacity: 0;
-    transform: translateY(8px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 18s linear infinite;
+}
+
+@media (pointer: fine) {
+  html,
+  body,
+  a,
+  button {
+    cursor: none !important;
   }
 }

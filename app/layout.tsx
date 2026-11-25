@@ -4,6 +4,7 @@ import "./globals.css";
 import { NaviagationMenu } from "./_components/navigation-menu";
 import { Footer } from "./_components/footer";
 import { SplashScreen } from "./_components/splash-screen";
+import { CustomCursor } from "./_components/custom-cursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <CustomCursor />
         <SplashScreen />
         {/* Navigation - Top (selalu terlihat, tidak ikut fade-in) */}
         <NaviagationMenu />

@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div
       key={pathname}
-      className="min-h-screen flex flex-col pt-[72px] md:pt-[112px] bg-white"
+      className="min-h-screen flex flex-col pt-0 md:pt-[112px] bg-white"
     >
 
       {/* Gunakan flex-row agar teks di kiri dan gambar di kanan berbagi ruang */}
