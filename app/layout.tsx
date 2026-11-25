@@ -19,6 +19,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Rizqi Fajri Dev Portfolio",
   description: "Creative Software Developer - Portfolio of Rizqi Fajri",
+  icons: {
+    icon: "/icon-profile.jpeg",
+    shortcut: "/icon-profile.jpeg",
+    apple: "/icon-profile.jpeg",
+  },
 };
 
 export default function RootLayout({
